@@ -1,56 +1,80 @@
 #include <iostream>
+#include <unordered_map>
+#include <stdexcept>
+#include <filesystem>
+
+enum argument_type{
+    COMMAND,
+    MODIFIER,
+    URL,
+    MUSIC,
+    DIRECTORY
+};
+
+std::unordered_map<enum argument_type, std::string> map_arguments(int argc, char* argv[]){
+
+    if(argc == 1){
+        throw std::runtime_error("Missing arguments");
+    }
+
+    std::unordered_map<enum argument_type, std::string> new_map;
+
+    int last_item = argc-1;
+    bool has_url = false;
+
+    if(argc == 2){
+        new_map.insert({COMMAND, argv[1]});
+    } else if(argc == 3){
+        new_map.insert({COMMAND, argv[1]});
+        new_map.insert({URL, argv[2]});
+        has_url = true;
+    } else{
+        new_map.insert({COMMAND, argv[1]});
+        for(int i = 2; i < (last_item-1); i++){
+            new_map.insert({MODIFIER, argv[i]});
+        }
+        new_map.insert({URL, argv[last_item]});
+        has_url = true;
+    }
+
+    if(has_url){
+        std::filesystem::path url = new_map[URL];
+
+        if(std::filesystem::exists(url)){
+            if(std::filesystem::is_regular_file(url)){
+                new_map.insert({MUSIC, new_map[URL]});
+                new_map.erase(URL);
+            } else if(std::filesystem::is_directory(url)){
+                new_map.insert({DIRECTORY, new_map[URL]});
+                new_map.erase(URL);
+            }
+        } else{
+            throw std::runtime_error("Provided filepath does not exist");
+        }
+    }
+
+    return new_map;
+}
 
 int main(int argc, char* argv[]){
 
+    std::unordered_map<enum argument_type, std::string> argument_map;
 
+    try{
+        argument_map = map_arguments(argc, argv);
+    } catch(const std::runtime_error& e){
+        std::cout << "\033[31m" << "ERROR: " << e.what() << "\033[0m" << std::endl;
+    }
+
+    /*
+    TODO(make custom enum? for console colors);
 
     const std::string RESET = "\033[0m";
     const std::string RED = "\033[31m";
     const std::string GREEN = "\033[32m";
     const std::string YELLOW = "\033[33m";
     const std::string BLUE = "\033[34m";
-
-    int MODIFIER_COUNT = argc - 3;
-
-    if(MODIFIER_COUNT < 0){
-        MODIFIER_COUNT = 0;
-    }
-
-    char* command;
-    char* url;
-    char* modifiers[MODIFIER_COUNT];
-
-    if(argc < 3){
-        std::cerr << RED << "ERROR: Missing arguments\nRemember the command structure: <command> <optional: modifier> <url>" << RESET;
-        return 1;
-    }
-
-    if(argc == 3){
-        command = argv[1];
-        url = argv[2];
-    } else{
-        int last_item_index = argc - 1;
-        int first_modifier_index = 2;
-        int last_modifier_index = first_modifier_index + MODIFIER_COUNT; 
-
-        int computed_modifier_count = 0;
-
-        command = argv[1];
-        url = argv[last_item_index];
-
-        for(int i = first_modifier_index; i < last_modifier_index; i++){
-            modifiers[computed_modifier_count] = argv[i];
-            computed_modifier_count++;
-        }
-    }
-
-    std::cout << "[command] " << command << "\n";
-    if(MODIFIER_COUNT != 0){
-        for(int i = 0; i < MODIFIER_COUNT; i++){
-            std::cout << "  [modifier] " << modifiers[i] << "\n";
-        }
-    }
-    std::cout << "[url] " << url << "\n";
+    */
 
     return 0;
 }
