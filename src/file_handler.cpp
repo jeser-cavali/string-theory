@@ -57,7 +57,7 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
         has_url = true;
     } else{
         new_map.insert({COMMAND, argv[1]});
-        for(int i = 2; i < (last_item-1); i++){
+        for(int i = 2; i < (last_item); i++){
             new_map.insert({MODIFIER, argv[i]});
         }
         new_map.insert({URL, argv[last_item]});

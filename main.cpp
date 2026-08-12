@@ -16,5 +16,9 @@ int main(int argc, char* argv[]){
         std::cout << Color::RED << "ERROR: " << e.what() << Color::RESET << std::endl;
     }
 
+    for(const auto& [key, value] : argument_map){
+        std::cout << key << ": " << value << "\n";
+    }
+
     return 0;
 }
