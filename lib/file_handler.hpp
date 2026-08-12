@@ -11,4 +11,4 @@ enum argument_type{
     DIRECTORY
 };
 
-std::unordered_map<enum argument_type, std::string> map_arguments(int argc, char* argv[]);
+std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc, char* argv[]);
