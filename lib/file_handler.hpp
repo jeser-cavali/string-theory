@@ -4,6 +4,7 @@
 #include <iostream>
 
 enum argument_type{
+    UNCLASSIFIED,
     COMMAND,
     MODIFIER,
     URL,
