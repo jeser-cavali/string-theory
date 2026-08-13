@@ -5,8 +5,12 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <filesystem>
+#include <chrono>
 
 int main(int argc, char* argv[]){
+
+    //benchmark start
+    auto benchamrk_start = std::chrono::high_resolution_clock::now();
 
     std::unordered_multimap<enum argument_type, std::string> argument_map;
 
@@ -19,6 +23,12 @@ int main(int argc, char* argv[]){
     for(const auto& [key, value] : argument_map){
         std::cout << key << ": " << value << "\n";
     }
+
+    auto benchmark_end = std::chrono::high_resolution_clock::now();
+
+    auto benchamrk_results = std::chrono::duration_cast<std::chrono::microseconds>(benchamrk_start - benchmark_end).count();
+
+    std::cout << "<execution duration> " << benchamrk_results << "ms\n";
 
     return 0;
 }

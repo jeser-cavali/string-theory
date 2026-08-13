@@ -116,22 +116,17 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
     }
 
     if(classified_map.find(DIRECTORY) != classified_map.end()){
-        std::vector<std::string> files;
-
+    
         for(const auto& entry : std::filesystem::directory_iterator(classified_map.find(DIRECTORY)->second)){
             if(std::filesystem::is_regular_file(entry.status())){
                 if(check_valid_filetype(entry.path().string())){
-                    files.push_back(entry.path().string());
+                    classified_map.insert({MUSIC, entry.path().string()});
                 }
             }
         }
 
-        if(files.empty()){
+        if(classified_map.find(MUSIC) == classified_map.end()){
             throw std::runtime_error("Directory has no valid files");
-        }
-
-        for(std::string file : files){
-            classified_map.insert({MUSIC, file});
         }
     }
 
