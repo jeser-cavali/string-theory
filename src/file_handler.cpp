@@ -79,7 +79,12 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
 
     for(const auto& [key, value] : new_map){
         if(is_command(value)){
-            classified_map.insert({COMMAND, value});
+            if(value == commands::implicit_play){
+                classified_map.insert({URL, value});
+                has_url = true;
+            }else{
+                classified_map.insert({COMMAND, value});
+            }
         } else if(is_modifier(value)){
             classified_map.insert({MODIFIER, value});
         } else if(std::filesystem::exists(value)){
