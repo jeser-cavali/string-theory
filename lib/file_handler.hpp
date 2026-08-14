@@ -12,4 +12,8 @@ enum argument_type{
     DIRECTORY
 };
 
+bool check_valid_filetype(std::string string);
+
 std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc, char* argv[]);
+
+std::string translate_enum(enum argument_type enum_item);

@@ -109,6 +109,8 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
         }
     }
 
+    //TODO(add this to the music component)
+    /*
     if(classified_map.find(MUSIC) != classified_map.end()){
         if(check_valid_filetype(classified_map.find(MUSIC)->second) == false){
             throw std::runtime_error("Invalid filetype");
@@ -129,6 +131,29 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
             throw std::runtime_error("Directory has no valid files");
         }
     }
+    */
 
     return classified_map;
+}
+
+std::string translate_enum(enum argument_type enum_item){
+    switch (enum_item){
+        case 0:
+        return "UNCLASSIFIED";
+
+        case 1:
+        return "COMMAND";
+
+        case 2:
+        return "MODIFIER";
+
+        case 3:
+        return "URL";
+
+        case 4:
+        return "MUSIC";
+
+        case 5:
+        return "DIRECTORY";
+    }
 }

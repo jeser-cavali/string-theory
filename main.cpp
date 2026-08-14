@@ -21,13 +21,12 @@ int main(int argc, char* argv[]){
     }
 
     for(const auto& [key, value] : argument_map){
-        std::cout << key << ": " << value << "\n";
+        std::cout << translate_enum(key) << ": " << value << std::endl;
     }
 
+    //benchmark end
     auto benchmark_end = std::chrono::high_resolution_clock::now();
-
     auto benchamrk_results = std::chrono::duration_cast<std::chrono::microseconds>(benchamrk_start - benchmark_end).count();
-
     std::cout << "<execution duration> " << benchamrk_results << "ms\n";
 
     return 0;
