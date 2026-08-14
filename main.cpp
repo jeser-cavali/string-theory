@@ -1,5 +1,6 @@
-#include "file_handler.hpp"
+#include "input_parser.hpp"
 #include "color.hpp"
+#include "music_engine.hpp"
 
 #include <iostream>
 #include <unordered_map>
@@ -20,14 +21,18 @@ int main(int argc, char* argv[]){
         std::cout << Color::RED << "ERROR: " << e.what() << Color::RESET << std::endl;
     }
 
+    //print argument_map
     for(const auto& [key, value] : argument_map){
-        std::cout << translate_enum(key) << ": " << value << std::endl;
+        std::cout << translate_argument_type(key) << ": " << value << std::endl;
     }
 
     //benchmark end
     auto benchmark_end = std::chrono::high_resolution_clock::now();
     auto benchamrk_results = std::chrono::duration_cast<std::chrono::microseconds>(benchamrk_start - benchmark_end).count();
     std::cout << "<execution duration> " << benchamrk_results << "ms\n";
+
+    //music component first implementation
+    play_music(argument_map.find(MUSIC)->second);
 
     return 0;
 }

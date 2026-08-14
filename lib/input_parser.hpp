@@ -16,4 +16,5 @@ bool check_valid_filetype(std::string string);
 
 std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc, char* argv[]);
 
-std::string translate_enum(enum argument_type enum_item);
+std::string translate_argument_type(enum argument_type enum_item);
+enum argument_type reverse_translate_argument_type(std::string string);

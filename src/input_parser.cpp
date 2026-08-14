@@ -1,4 +1,4 @@
-#include "file_handler.hpp"
+#include "input_parser.hpp"
 
 #include <filesystem>
 
@@ -136,7 +136,7 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
     return classified_map;
 }
 
-std::string translate_enum(enum argument_type enum_item){
+std::string translate_argument_type(enum argument_type enum_item){
     switch (enum_item){
         case 0:
         return "UNCLASSIFIED";
@@ -156,4 +156,23 @@ std::string translate_enum(enum argument_type enum_item){
         case 5:
         return "DIRECTORY";
     }
+}
+
+enum argument_type reverse_translate_argument_type(std::string string){
+    if(string == "UNCLASSIFIED"){
+        return UNCLASSIFIED;
+    }else if(string == "COMMAND"){
+        return COMMAND;
+    } else if(string == "MODIFIER"){
+        return MODIFIER;
+    } else if(string == "URL"){
+        return URL;
+    } else if(string == "MUSIC"){
+        return MUSIC;
+    } else if(string == "DIRECTORY"){
+        return DIRECTORY;
+    } else{
+        throw std::runtime_error("String is not <argument_type>");
+    }
+    
 }
