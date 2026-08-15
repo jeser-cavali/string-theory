@@ -2,11 +2,7 @@
 #include "music_engine.hpp"
 
 #include <thread>
-
-struct AudioData{
-    ma_decoder decoder;
-    bool isFinished = false;
-};
+#include <vector>
 
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount){
     AudioData* pAudioData = (AudioData*)pDevice->pUserData;
@@ -20,6 +16,40 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     }
 
     (void)pInput;
+}
+
+Harmony::Harmony(){
+    _decoder_config = ma_decoder_config_init(ma_format_f32, 2, 44100);
+    current_song = 0;
+
+     _device_config = ma_device_config_init(ma_device_type_playback);
+     _device_config.playback.format = ma_format_f32;
+    _device_config.playback.channels = 2;
+    _device_config.sampleRate = 44100;
+    _device_config.dataCallback = data_callback;
+    _device_config.pUserData = &audioData;
+}
+
+void Harmony::play_music(std::string url){
+    if(ma_decoder_init_file(url.c_str(), &_decoder_config, &audioData.decoder) != MA_SUCCESS){
+        throw std::runtime_error("Unable to decode file");
+    }
+
+    if(ma_device_init(NULL, &_device_config, &device) != MA_SUCCESS){
+        ma_decoder_uninit(&audioData.decoder);
+        throw std::runtime_error("Unable to initiate device");
+    }
+
+    if(ma_device_start(&device) != MA_SUCCESS){
+        throw std::runtime_error("Unable to start device");
+    }
+
+    while(!audioData.isFinished){
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    ma_device_uninit(&device);
+    ma_decoder_uninit(&audioData.decoder);
 }
 
 void play_music(std::string music_url){
