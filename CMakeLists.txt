@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.0)
 
 project(
-    player
+    stringtheory
     VERSION 0.1
     LANGUAGES CXX C
 )
@@ -18,6 +18,6 @@ add_library(player_core ${SOURCES})
 
 target_include_directories(player_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_executable(player main.cpp)
+add_executable(stringtheory main.cpp)
 
-target_link_libraries(player PRIVATE player_core)
+target_link_libraries(stringtheory PRIVATE player_core)
