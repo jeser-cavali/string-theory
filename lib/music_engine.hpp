@@ -4,6 +4,29 @@
 
 #include <iostream>
 
+struct AudioData{
+
+    ma_decoder decoder;
+
+    std::string name;
+    std::string autor;
+
+    bool isFinished = false;
+    bool isPaused = false;
+};
+
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount);
+
+class Harmony{
+    private:
+        ma_decoder_config _decoder_config;
+        ma_device_config _device_config;
+        AudioData audioData;
+        ma_device device;
+        int current_song;
+    public:
+        Harmony();
+        void play_music(std::string url);
+};
 
 void play_music(std::string music_url);
