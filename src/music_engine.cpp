@@ -54,4 +54,36 @@ void Harmony::play_music(std::unordered_multimap<argument_type, std::string> arg
     ma_decoder_uninit(&audioData.decoder);
 }
 
-void Harmony::play_directory(std::unordered_multimap<argument_type, std::string> argument_map){}
+void Harmony::play_directory(std::unordered_multimap<argument_type, std::string> argument_map){
+    auto range = argument_map.equal_range(MUSIC);
+    bool deviceStarted = false;
+
+    for(auto i = range.first; i != range.second; ++i){
+        audioData.isFinished = false;
+
+        if(ma_decoder_init_file(i->second.c_str(), &_decoder_config, &audioData.decoder) != MA_SUCCESS){
+            throw std::runtime_error("Unable to decode file");
+        }
+
+        if(deviceStarted == false){
+            if(ma_device_init(NULL, &_device_config, &device) != MA_SUCCESS){
+                ma_decoder_uninit(&audioData.decoder);
+                throw std::runtime_error("Unable to initiate device");
+            }
+            deviceStarted = true;
+        }
+
+        if(ma_device_start(&device) != MA_SUCCESS){
+            throw std::runtime_error("Unable to start device");
+        }
+
+        std::cout << "Playing " << i->second <<"\n";
+
+        while(!audioData.isFinished){
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        ma_device_stop(&device);
+        ma_decoder_uninit(&audioData.decoder);
+    }
+}

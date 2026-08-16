@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
     
     try{
         Harmony h = Harmony();
-        h.play_music(argument_map);
+        h.play_directory(argument_map);
     } catch(const std::runtime_error& e){
         std::cout << Color::RED << "ERROR: " << e.what() << Color::RESET << std::endl;
     }
