@@ -30,7 +30,9 @@ Harmony::Harmony(){
     _device_config.pUserData = &audioData;
 }
 
-void Harmony::play_music(std::string url){
+void Harmony::play_music(std::unordered_multimap<argument_type, std::string> argument_map){
+    std::string url = argument_map.find(MUSIC)->second;
+
     if(ma_decoder_init_file(url.c_str(), &_decoder_config, &audioData.decoder) != MA_SUCCESS){
         throw std::runtime_error("Unable to decode file");
     }
@@ -52,4 +54,4 @@ void Harmony::play_music(std::string url){
     ma_decoder_uninit(&audioData.decoder);
 }
 
-void Harmony::play_directory(std::string url){}
+void Harmony::play_directory(std::unordered_multimap<argument_type, std::string> argument_map){}

@@ -32,14 +32,13 @@ int main(int argc, char* argv[]){
     std::cout << "<execution duration> " << benchamrk_results << "ms\n";
 
     //music component first implementation
-    /*
+    
     try{
         Harmony h = Harmony();
-        h.play_music(argument_map.find(MUSIC)->second);
+        h.play_music(argument_map);
     } catch(const std::runtime_error& e){
         std::cout << Color::RED << "ERROR: " << e.what() << Color::RESET << std::endl;
     }
-    */
 
     return 0;
 }

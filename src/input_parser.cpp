@@ -2,24 +2,6 @@
 
 #include <filesystem>
 
-namespace commands {
-    constexpr std::string_view implicit_play = ".";
-    constexpr std::string_view play = "play";
-    constexpr std::string_view skip = "skip";
-    constexpr std::string_view pause = "pause";
-}
-
-namespace modifiers {
-    constexpr std::string_view rand = "rand";
-}
-
-namespace valid_filetypes {
-    constexpr std::string_view mp3 = ".mp3";
-    constexpr std::string_view wav = ".wav";
-    constexpr std::string_view flac = ".flac";
-    constexpr std::string_view ogg = ".ogg";
-}
-
 bool is_command(std::string string){
     return (
         string == commands::implicit_play ||

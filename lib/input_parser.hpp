@@ -12,6 +12,24 @@ enum argument_type{
     DIRECTORY
 };
 
+namespace commands {
+    constexpr std::string_view implicit_play = ".";
+    constexpr std::string_view play = "play";
+    constexpr std::string_view skip = "skip";
+    constexpr std::string_view pause = "pause";
+};
+
+namespace modifiers {
+    constexpr std::string_view rand = "rand";
+};
+
+namespace valid_filetypes {
+    constexpr std::string_view mp3 = ".mp3";
+    constexpr std::string_view wav = ".wav";
+    constexpr std::string_view flac = ".flac";
+    constexpr std::string_view ogg = ".ogg";
+};
+
 inline std::string translate_argument_type(enum argument_type enum_item){
     switch (enum_item){
         case 0:
@@ -32,7 +50,7 @@ inline std::string translate_argument_type(enum argument_type enum_item){
         case 5:
         return "DIRECTORY";
     }
-}
+};
 
 inline enum argument_type reverse_translate_argument_type(std::string string){
     if(string == "UNCLASSIFIED"){
@@ -50,7 +68,7 @@ inline enum argument_type reverse_translate_argument_type(std::string string){
     } else{
         throw std::runtime_error("String is not <argument_type>");
     }
-}
+};
 
 bool is_valid_filetype(std::string string);
 
