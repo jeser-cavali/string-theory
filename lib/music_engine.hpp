@@ -27,6 +27,7 @@ class Harmony{
     public:
         Harmony();
         void play_music(std::string url);
+        void play_directory(std::string url);
 };
 
 void play_music(std::string music_url);

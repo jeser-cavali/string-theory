@@ -22,8 +22,8 @@ Harmony::Harmony(){
     _decoder_config = ma_decoder_config_init(ma_format_f32, 2, 44100);
     current_song = 0;
 
-     _device_config = ma_device_config_init(ma_device_type_playback);
-     _device_config.playback.format = ma_format_f32;
+    _device_config = ma_device_config_init(ma_device_type_playback);
+    _device_config.playback.format = ma_format_f32;
     _device_config.playback.channels = 2;
     _device_config.sampleRate = 44100;
     _device_config.dataCallback = data_callback;
@@ -52,40 +52,4 @@ void Harmony::play_music(std::string url){
     ma_decoder_uninit(&audioData.decoder);
 }
 
-void play_music(std::string music_url){
-    AudioData audio_data;
-
-    ma_result result = ma_decoder_init_file(music_url.c_str(), NULL, &audio_data.decoder);
-    if(result != MA_SUCCESS){
-        std::cout << "ERROR: Unable to initiate file\n";
-        return;
-    }
-
-    ma_device_config config = ma_device_config_init(ma_device_type_playback);
-    config.playback.format = audio_data.decoder.outputFormat;
-    config.playback.channels = audio_data.decoder.outputChannels;
-    config.sampleRate = audio_data.decoder.outputSampleRate;
-    config.dataCallback = data_callback;
-    config.pUserData = &audio_data;
-
-    ma_device device;
-    if(ma_device_init(NULL, &config, &device) != MA_SUCCESS){
-        std::cout << "ERROR: Failed to open playback device\n";
-        ma_decoder_uninit(&audio_data.decoder);
-        return;
-    }
-
-    if(ma_device_start(&device) != MA_SUCCESS){
-        std::cout << "ERROR: Failed to start playback device\n";
-        ma_device_uninit(&device);
-        ma_decoder_uninit(&audio_data.decoder);
-        return;
-    }
-
-    while(!audio_data.isFinished){
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-
-    ma_device_uninit(&device);
-    ma_decoder_uninit(&audio_data.decoder);
-}
+void Harmony::play_directory(std::string url){}

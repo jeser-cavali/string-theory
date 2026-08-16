@@ -12,9 +12,46 @@ enum argument_type{
     DIRECTORY
 };
 
-bool check_valid_filetype(std::string string);
+inline std::string translate_argument_type(enum argument_type enum_item){
+    switch (enum_item){
+        case 0:
+        return "UNCLASSIFIED";
+
+        case 1:
+        return "COMMAND";
+
+        case 2:
+        return "MODIFIER";
+
+        case 3:
+        return "URL";
+
+        case 4:
+        return "MUSIC";
+
+        case 5:
+        return "DIRECTORY";
+    }
+}
+
+inline enum argument_type reverse_translate_argument_type(std::string string){
+    if(string == "UNCLASSIFIED"){
+        return UNCLASSIFIED;
+    }else if(string == "COMMAND"){
+        return COMMAND;
+    } else if(string == "MODIFIER"){
+        return MODIFIER;
+    } else if(string == "URL"){
+        return URL;
+    } else if(string == "MUSIC"){
+        return MUSIC;
+    } else if(string == "DIRECTORY"){
+        return DIRECTORY;
+    } else{
+        throw std::runtime_error("String is not <argument_type>");
+    }
+}
+
+bool is_valid_filetype(std::string string);
 
 std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc, char* argv[]);
-
-std::string translate_argument_type(enum argument_type enum_item);
-enum argument_type reverse_translate_argument_type(std::string string);
