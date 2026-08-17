@@ -30,9 +30,8 @@ class Harmony{
         int current_song;
     public:
         Harmony();
-        //~Harmony();
+        // TODO: include destructor ininit logic
+        ~Harmony();
         void play_music(std::unordered_multimap<argument_type, std::string> argument_map);
         void play_directory(std::unordered_multimap<argument_type, std::string> argument_map);
 };
-
-void play_music(std::string music_url);

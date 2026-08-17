@@ -33,6 +33,19 @@ Harmony::Harmony(){
     isDeviceInitiated = false;
 }
 
+Harmony::~Harmony(){
+    if(isDeviceInitiated){
+        ma_device_uninit(&device);
+        isDeviceInitiated = false;
+    }
+
+    if(isDecoderInitiated){
+        ma_decoder_uninit(&audio_data.decoder);
+        isDecoderInitiated = false;
+    }
+}
+
+//TODO: update method parameters
 void Harmony::play_music(std::unordered_multimap<argument_type, std::string> argument_map){
     std::string url = argument_map.find(MUSIC)->second;
 
@@ -68,6 +81,7 @@ void Harmony::play_music(std::unordered_multimap<argument_type, std::string> arg
     isDecoderInitiated = false;
 }
 
+//TODO: update method parameters
 void Harmony::play_directory(std::unordered_multimap<argument_type, std::string> argument_map){
     auto range = argument_map.equal_range(MUSIC);
 

@@ -47,40 +47,29 @@ class InputStructure{
 };
 
 inline std::string translate_argument_type(argument_type enum_item){
-    switch (enum_item){
-        case 0:
-        return "UNCLASSIFIED";
-
-        case 1:
-        return "COMMAND";
-
-        case 2:
-        return "MODIFIER";
-
-        case 3:
-        return "URL";
-
-        case 4:
-        return "MUSIC";
-
-        case 5:
-        return "DIRECTORY";
-    }
+    std::string values[6] = {
+        "UNCLASSIFIED",
+        "COMMAND",
+        "MODIFIER",
+        "URL",
+        "MUSIC",
+        "DIRECTORY"
+    };
+    return values[enum_item];
 };
 
 inline enum argument_type reverse_translate_argument_type(std::string string){
-    if(string == "UNCLASSIFIED"){
-        return UNCLASSIFIED;
-    }else if(string == "COMMAND"){
-        return COMMAND;
-    } else if(string == "MODIFIER"){
-        return MODIFIER;
-    } else if(string == "URL"){
-        return URL;
-    } else if(string == "MUSIC"){
-        return MUSIC;
-    } else if(string == "DIRECTORY"){
-        return DIRECTORY;
+    std::unordered_map<std::string, argument_type> values = {
+        {"UNCLASSIFIED", UNCLASSIFIED},
+        {"COMMAND", COMMAND},
+        {"MODIFIER", MODIFIER},
+        {"URL", URL},
+        {"MUSIC", MUSIC},
+        {"DIRECTORY", DIRECTORY}
+    };
+
+    if(values.contains(string)){
+        return values.at(string);
     } else{
         throw std::runtime_error("String is not <argument_type>");
     }
