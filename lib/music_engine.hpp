@@ -23,11 +23,14 @@ class Harmony{
     private:
         ma_decoder_config _decoder_config;
         ma_device_config _device_config;
-        AudioData audioData;
+        AudioData audio_data;
+        std::atomic<bool> isDecoderInitiated;
         ma_device device;
+        std::atomic<bool> isDeviceInitiated;
         int current_song;
     public:
         Harmony();
+        //~Harmony();
         void play_music(std::unordered_multimap<argument_type, std::string> argument_map);
         void play_directory(std::unordered_multimap<argument_type, std::string> argument_map);
 };

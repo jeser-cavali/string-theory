@@ -27,18 +27,18 @@ Harmony::Harmony(){
     _device_config.playback.channels = 2;
     _device_config.sampleRate = 44100;
     _device_config.dataCallback = data_callback;
-    _device_config.pUserData = &audioData;
+    _device_config.pUserData = &audio_data;
 }
 
 void Harmony::play_music(std::unordered_multimap<argument_type, std::string> argument_map){
     std::string url = argument_map.find(MUSIC)->second;
 
-    if(ma_decoder_init_file(url.c_str(), &_decoder_config, &audioData.decoder) != MA_SUCCESS){
+    if(ma_decoder_init_file(url.c_str(), &_decoder_config, &audio_data.decoder) != MA_SUCCESS){
         throw std::runtime_error("Unable to decode file");
     }
 
     if(ma_device_init(NULL, &_device_config, &device) != MA_SUCCESS){
-        ma_decoder_uninit(&audioData.decoder);
+        ma_decoder_uninit(&audio_data.decoder);
         throw std::runtime_error("Unable to initiate device");
     }
 
@@ -46,12 +46,12 @@ void Harmony::play_music(std::unordered_multimap<argument_type, std::string> arg
         throw std::runtime_error("Unable to start device");
     }
 
-    while(!audioData.isFinished){
+    while(!audio_data.isFinished){
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     ma_device_uninit(&device);
-    ma_decoder_uninit(&audioData.decoder);
+    ma_decoder_uninit(&audio_data.decoder);
 }
 
 void Harmony::play_directory(std::unordered_multimap<argument_type, std::string> argument_map){
@@ -59,15 +59,15 @@ void Harmony::play_directory(std::unordered_multimap<argument_type, std::string>
     bool deviceStarted = false;
 
     for(auto i = range.first; i != range.second; ++i){
-        audioData.isFinished = false;
+        audio_data.isFinished = false;
 
-        if(ma_decoder_init_file(i->second.c_str(), &_decoder_config, &audioData.decoder) != MA_SUCCESS){
+        if(ma_decoder_init_file(i->second.c_str(), &_decoder_config, &audio_data.decoder) != MA_SUCCESS){
             throw std::runtime_error("Unable to decode file");
         }
 
         if(deviceStarted == false){
             if(ma_device_init(NULL, &_device_config, &device) != MA_SUCCESS){
-                ma_decoder_uninit(&audioData.decoder);
+                ma_decoder_uninit(&audio_data.decoder);
                 throw std::runtime_error("Unable to initiate device");
             }
             deviceStarted = true;
@@ -79,11 +79,11 @@ void Harmony::play_directory(std::unordered_multimap<argument_type, std::string>
 
         std::cout << "Playing " << i->second <<"\n";
 
-        while(!audioData.isFinished){
+        while(!audio_data.isFinished){
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
         ma_device_stop(&device);
-        ma_decoder_uninit(&audioData.decoder);
+        ma_decoder_uninit(&audio_data.decoder);
     }
 }

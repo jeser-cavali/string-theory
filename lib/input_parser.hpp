@@ -1,7 +1,9 @@
 #pragma once
 
 #include <unordered_map>
+#include <unordered_set>
 #include <iostream>
+#include <optional>
 
 enum argument_type{
     UNCLASSIFIED,
@@ -13,14 +15,15 @@ enum argument_type{
 };
 
 namespace commands {
-    constexpr std::string_view implicit_play = ".";
     constexpr std::string_view play = "play";
     constexpr std::string_view skip = "skip";
     constexpr std::string_view pause = "pause";
+    constexpr std::string_view back = "back";
 };
 
 namespace modifiers {
     constexpr std::string_view rand = "rand";
+    constexpr std::string_view loop = "loop";
 };
 
 namespace valid_filetypes {
@@ -30,7 +33,20 @@ namespace valid_filetypes {
     constexpr std::string_view ogg = ".ogg";
 };
 
-inline std::string translate_argument_type(enum argument_type enum_item){
+class InputStructure{
+    private:
+        std::optional<std::string> command;
+        std::optional<std::unordered_set<std::string>> command_modifiers;
+        std::optional<std::pair<argument_type, std::string>> url;
+    public:
+        InputStructure(int argc, char* argv[]);
+        std::optional<std::string> get_command();
+        std::optional<std::unordered_set<std::string>> get_modifiers();
+        std::optional<std::pair<argument_type, std::string>> get_url();
+        void print();
+};
+
+inline std::string translate_argument_type(argument_type enum_item){
     switch (enum_item){
         case 0:
         return "UNCLASSIFIED";

@@ -4,15 +4,18 @@
 
 bool is_command(std::string string){
     return (
-        string == commands::implicit_play ||
         string == commands::play ||
         string == commands::skip ||
-        string == commands::pause
+        string == commands::pause ||
+        string == commands::back
     );
 }
 
 bool is_modifier(std::string string){
-    return string == modifiers::rand;
+    return (
+        string == modifiers::rand ||
+        string == modifiers::loop
+    );
 }
 
 bool is_valid_filetype(std::string string){
@@ -22,6 +25,67 @@ bool is_valid_filetype(std::string string){
         string.contains(valid_filetypes::flac) ||
         string.contains(valid_filetypes::ogg)
     );
+}
+
+InputStructure::InputStructure(int argc, char* argv[]){
+    if(argc == 1){
+        throw std::runtime_error("Missing arguments");
+    }
+
+    for(int i = 1; i < argc; i++){
+        if(is_command(argv[i]) && !command.has_value()){
+            command = argv[i];
+        } else if(is_modifier(argv[i])){
+            if(!command_modifiers.has_value()){
+                command_modifiers = {argv[i]};
+            } else{
+                command_modifiers.value().insert(argv[i]);
+            }
+        } else if(std::filesystem::exists(argv[i]) && !url.has_value()){
+            if(std::filesystem::is_directory(argv[i])){
+                url = {DIRECTORY, argv[i]};
+            } else if(std::filesystem::is_regular_file(argv[i])){
+                if(is_valid_filetype(argv[i])){
+                    url = {MUSIC, argv[i]};
+                } else{
+                    throw std::runtime_error("Invalid filetype");
+                }
+            } else{
+                throw std::runtime_error("Invalid url");
+            }
+        }
+    }
+
+    if(!command.has_value() && url.has_value()){
+        command = commands::play;
+    }
+}
+
+std::optional<std::string> InputStructure::get_command(){
+    return command;
+}
+std::optional<std::unordered_set<std::string>> InputStructure::get_modifiers(){
+    return command_modifiers;
+}
+std::optional<std::pair<argument_type, std::string>> InputStructure::get_url(){
+    return url;
+}
+
+void InputStructure::print(){
+    if(command.has_value()){
+        std::cout << "[COMMAND] " << command.value() << std::endl;
+    }
+
+    if(command_modifiers.has_value()){
+        for(auto entry : command_modifiers.value()){
+            std::cout << "[MOD] " << entry << std::endl;
+        }
+    }
+
+    if(url.has_value()){
+        std::cout << "[URL TYPE] " << translate_argument_type(url.value().first) << std::endl;
+        std::cout << "[URL] " << url.value().second << std::endl;
+    }
 }
 
 std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc, char* argv[]){
@@ -35,12 +99,7 @@ std::unordered_multimap<enum argument_type, std::string> map_arguments(int argc,
 
     for(int i = 1; i < argc; i++){
         if(is_command(argv[i])){
-            if(argv[i] == commands::implicit_play){
-                classified_map.insert({URL, argv[i]});
-                has_url = true;
-            } else{
-                classified_map.insert({COMMAND, argv[i]});
-            }
+            classified_map.insert({COMMAND, argv[i]});
         } else if(is_modifier(argv[i])){
             classified_map.insert({MODIFIER, argv[i]});
         } else if(std::filesystem::exists(argv[i])){
