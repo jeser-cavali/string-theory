@@ -1,6 +1,6 @@
 #include "input_parser.hpp"
 #include "color.hpp"
-#include "music_engine.hpp"
+#include "harmony_engine.hpp"
 
 #include <iostream>
 #include <unordered_map>

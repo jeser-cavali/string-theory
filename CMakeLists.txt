@@ -18,6 +18,8 @@ add_library(player_core ${SOURCES})
 
 target_include_directories(player_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_executable(stringtheory main.cpp)
+add_executable(stringtheory main_cli.cpp)
+add_executable(harmony main_daemon.cpp)
 
 target_link_libraries(stringtheory PRIVATE player_core)
+target_link_libraries(harmony PRIVATE player_core)
