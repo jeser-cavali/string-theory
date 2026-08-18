@@ -35,24 +35,53 @@ bool IsProcessRunning(std::wstring_view processName) {
     return exists;
 }
 
+void start_process(std::string string){
+    char* cmd = const_cast<char*>(string.c_str());
+
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+
+    BOOL success = CreateProcess(
+    NULL,           // Application name (can be NULL if passed in cmd)
+    cmd,            // Command line arguments (must be writable)
+    NULL,           // Process handle not inheritable
+    NULL,           // Thread handle not inheritable
+    FALSE,          // Disable handle inheritance
+    0,              // No creation flags
+    NULL,           // Use parent's environment block
+    NULL,           // Use parent's starting directory
+    &si,            // Pointer to STARTUPINFO structure
+    &pi             // Pointer to PROCESS_INFORMATION structure
+    );
+}
+
 int main(int argc, char* argv[]){
 
     //benchmark start
-    //auto benchamrk_start = std::chrono::high_resolution_clock::now();
+    auto benchamrk_start = std::chrono::high_resolution_clock::now();
 
-    std::cout << IsProcessRunning(L"harmony.exe") << std::endl;
-
-    /*
     try{
         InputStructure i = InputStructure(argc, argv);
+
+        std::cout << "Starting..." << std::endl;
+
+        if(!IsProcessRunning(L"harmony.exe")){
+            start_process("harmony.exe");
+            std::cout << "Starting Harmony engine..." << std::endl;
+        } else{
+            std::cout << "System is in harmony..." << std::endl;
+        }
+
         auto benchmark_end = std::chrono::high_resolution_clock::now();
         auto benchamrk_results = std::chrono::duration_cast<std::chrono::microseconds>(benchamrk_start - benchmark_end).count();
         std::cout << "<execution duration> " << benchamrk_results << "ms\n";
-        i.print();
     } catch(const std::runtime_error& e){
         std::cout << Color::RED << "ERROR: " << e.what() << Color::RESET << std::endl;
     }
-    */
     
     //std::unordered_multimap<enum argument_type, std::string> argument_map;
 
