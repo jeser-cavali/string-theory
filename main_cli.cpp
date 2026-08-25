@@ -1,6 +1,7 @@
 #include "input_parser.hpp"
 #include "color.hpp"
 #include "harmony_engine.hpp"
+#include "./build/_deps/harmony-src/harmony.hpp"
 
 #include <iostream>
 #include <unordered_map>
