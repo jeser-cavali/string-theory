@@ -4,9 +4,7 @@
 
 #include <iostream>
 
-int main(){
-    int argc = 2;
-    char* argv[2] = {".", "play"};
+int main(int argc, char* argv[]){
     try{
         auto i = inputStructure(argc, argv);
     } catch(std::runtime_error& e){
