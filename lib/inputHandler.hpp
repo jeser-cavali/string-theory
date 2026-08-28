@@ -40,6 +40,8 @@ enum URL_TYPES{
     DIRECTORY
 };
 
+std::string urltypeToString(URL_TYPES url_type);
+
 //COMMANDS stringToCommand(std::string string);
 //std::string commandToString(COMMANDS command);
 
@@ -57,4 +59,5 @@ class inputStructure{
         std::optional<enum URL_TYPES> urlType;
     public:
         inputStructure(int argc, char* argv[]);
+        void print();
 };
