@@ -21,20 +21,6 @@ namespace modifier_list{
     };
 }
 
-/*
-enum COMMANDS{
-    PLAY,
-    PAUSE,
-    SKIP,
-    STOP
-};
-
-enum MODIFIERS{
-    LOOP,
-    RAND
-};
-*/
-
 enum URL_TYPES{
     MUSIC,
     DIRECTORY
@@ -42,19 +28,15 @@ enum URL_TYPES{
 
 std::string urltypeToString(URL_TYPES url_type);
 
-//COMMANDS stringToCommand(std::string string);
-//std::string commandToString(COMMANDS command);
-
-//MODIFIERS stringToModifier(std::string string);
-//std::string modifierToString(MODIFIERS modifier);
-
 bool isCommand(std::string string);
 bool isModifier(std::string string);
 
 class inputStructure{
     private:
         std::optional<std::string> command;
-        std::queue<std::string> modifiers;
+        //std::queue<std::string> modifiers;
+        std::optional<bool> loop;
+        std::optional<bool> rand;
         std::optional<std::filesystem::path> url;
         std::optional<enum URL_TYPES> urlType;
     public:

@@ -2,8 +2,6 @@
 #include "color.hpp"
 #include "inputHandler.hpp"
 
-#include <iostream>
-
 int main(int argc, char* argv[]){
     try{
         auto i = inputStructure(argc, argv);

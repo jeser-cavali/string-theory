@@ -1,6 +1,6 @@
 #include "inputHandler.hpp"
 
-#include <unordered_map>
+#include <cstring>
 #include <array>
 #include <algorithm>
 #include <iostream>
@@ -36,7 +36,8 @@ inputStructure::inputStructure(int argc, char* argv[]){
         }
 
         if(isModifier(argv[i])){
-            modifiers.emplace(argv[i]);
+            if(strcmp(argv[i], "loop")) loop = true;
+            if(strcmp(argv[i], "rand")) rand = true;
         }
 
         if(std::filesystem::exists(argv[i])){
@@ -53,12 +54,9 @@ inputStructure::inputStructure(int argc, char* argv[]){
 void inputStructure::print(){
     if(command.has_value()) std::cout << "[COMMAND] " << command.value() << std::endl;
 
-    if(!modifiers.empty()){
-        for(auto mod : modifiers._Get_container()){
-            std::cout << "[MOD] " << mod << std::endl;
-        }
-    }
+    if(loop.has_value()) std::cout << "[LOOP] " << loop.value() << std::endl;
+    if(rand.has_value()) std::cout << "[RAND] " << rand.value() << std::endl;
 
     if(url.has_value()) std::cout << "[URL] " << url.value() << std::endl;
-    if(urlType.has_value()) std::cout << "[URL_TYPE]" << urltypeToString(urlType.value()) << std::endl;
+    if(urlType.has_value()) std::cout << "[URL_TYPE] " << urltypeToString(urlType.value()) << std::endl;
 }
